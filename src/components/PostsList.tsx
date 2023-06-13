@@ -3,6 +3,7 @@ import Post from "./Post";
 import classes from "./PostsList.module.css";
 import NewPost from "./NewPost";
 import Modal from "./Modal";
+import PostInterface from "../types/PostInterface";
 
 interface PostsListInterface {
   isPosting: Boolean;
@@ -10,23 +11,24 @@ interface PostsListInterface {
 }
 
 const PostsList = ({ isPosting, onStopPosting }: PostsListInterface) => {
-  const [body, setBody] = useState("");
-  const [author, setAuthor] = useState("");
+  const [posts, setPosts] = useState<PostInterface[]>([]);
+
+  const addNewPost = (data: PostInterface) => {
+    setPosts((existingPosts) => [data, ...existingPosts]);
+  };
 
   return (
     <Fragment>
       {isPosting && (
         <Modal onClose={onStopPosting}>
-          <NewPost
-            onBodyChange={(e) => setBody(e.target.value)}
-            onAuthorChange={setAuthor}
-          />
+          <NewPost onCancel={onStopPosting} onAddPost={addNewPost} />
         </Modal>
       )}
 
       <ul className={classes.posts}>
-        <Post author={author} text={body} />
-        <Post author="Karis" text="Django guru" />
+        {posts.map((post) => (
+          <Post author={post.author} text={post.body} key={post.body} />
+        ))}
       </ul>
     </Fragment>
   );
