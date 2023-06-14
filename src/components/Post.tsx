@@ -1,14 +1,18 @@
+import { Link } from "react-router-dom";
 import classes from "./Post.module.css";
+import PostInterface from "../types/PostInterface";
 
-interface PostInterface {
-  author: string;
-  text: string;
+interface Post {
+  post: PostInterface;
 }
-const Post = ({ author, text }: PostInterface) => {
+
+const Post = ({ post }: Post) => {
   return (
     <li className={classes.post}>
-      <p className={classes.author}>{author}</p>
-      <p className={classes.text}>{text}</p>
+      <Link to={post.id}>
+        <p className={classes.author}>{post.author}</p>
+        <p className={classes.text}>{post.body}</p>
+      </Link>
     </li>
   );
 };
