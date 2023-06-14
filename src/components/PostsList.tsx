@@ -1,48 +1,27 @@
 import { Fragment, useState, ChangeEvent, useEffect } from "react";
 import Post from "./Post";
 import classes from "./PostsList.module.css";
-import NewPost from "./NewPost";
+import NewPost from "../routes/NewPost";
 import Modal from "./Modal";
 import PostInterface from "../types/PostInterface";
+import { useLoaderData } from "react-router-dom";
 
-interface PostsListInterface {
-  isPosting: Boolean;
-  onStopPosting: () => void;
-}
+// interface PostsListInterface {
+//   isPosting: Boolean;
+//   onStopPosting: () => void;
+// }
 
-const PostsList = ({ isPosting, onStopPosting }: PostsListInterface) => {
-  const [posts, setPosts] = useState<PostInterface[]>([]);
+const PostsList = () => {
+  // const [posts, setPosts] = useState<PostInterface[]>([]);
 
-  const addNewPost = async (data: PostInterface) => {
-    await fetch("http://localhost:8080/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+  // const addNewPost = async (data: PostInterface) => {
+  //   setPosts((existingPosts) => [data, ...existingPosts]);
+  // };
 
-    setPosts((existingPosts) => [data, ...existingPosts]);
-  };
-
-  useEffect(() => {
-    getPosts();
-  }, []);
-
-  const getPosts = async () => {
-    const response = await fetch("http://localhost:8080/posts");
-    const { posts } = await response.json();
-    setPosts(posts);
-  };
+  const posts: PostInterface[] = useLoaderData() as PostInterface[];
 
   return (
     <Fragment>
-      {isPosting && (
-        <Modal onClose={onStopPosting}>
-          <NewPost onCancel={onStopPosting} onAddPost={addNewPost} />
-        </Modal>
-      )}
-
       {posts.length === 0 && (
         <h2 style={{ textAlign: "center", color: "white" }}>No posts</h2>
       )}
