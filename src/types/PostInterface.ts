@@ -1,6 +1,7 @@
 interface PostInterface {
-  body: string;
+  id: string;
   author: string;
+  body: string;
 }
 
 export default PostInterface;
